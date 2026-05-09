@@ -1,10 +1,24 @@
-import streamlit as st
+import os
 import re
 import json
+import streamlit as st
+
 from groq import Groq
+from dotenv import load_dotenv
 
-api_key = st.secrets["GROQ_API_KEY"]
+# ---------------- LOAD ENV ---------------- #
+load_dotenv()
 
+# ---------------- API KEY HANDLING ---------------- #
+try:
+    # For Streamlit Cloud
+    api_key = st.secrets["GROQ_API_KEY"]
+
+except:
+    # For local development
+    api_key = os.getenv("GROQ_API_KEY")
+
+# ---------------- GROQ CLIENT ---------------- #
 client = Groq(api_key=api_key)
 
 # ---------------- JSON RESPONSE ---------------- #
@@ -23,9 +37,11 @@ def run_llm(prompt):
 
     content = response.choices[0].message.content.strip()
 
+    # Remove markdown
     content = content.replace("```json", "")
     content = content.replace("```", "")
 
+    # Extract JSON
     match = re.search(r"\{.*\}", content, re.DOTALL)
 
     if match:
