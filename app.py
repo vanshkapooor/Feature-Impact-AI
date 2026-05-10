@@ -9,14 +9,12 @@ from scorer import calculate_score
 from insights import generate_chart_insights
 from explanation_engine import generate_explanation
 
-# ---------------- PAGE CONFIG ---------------- #
 st.set_page_config(
     page_title="Feature Impact Analysis AI",
     page_icon="🚀",
     layout="wide"
 )
 
-# ---------------- CUSTOM CSS ---------------- #
 st.markdown("""
 <style>
 .main {
@@ -60,14 +58,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- HEADER ---------------- #
 st.title("🚀 Feature Impact Analysis AI System")
 st.markdown("""
 Analyze product features before development using AI-powered evaluation,
 risk prediction, and decision intelligence.
 """)
 
-# ---------------- SIDEBAR ---------------- #
 st.sidebar.header("📌 About System")
 
 st.sidebar.info("""
@@ -80,7 +76,6 @@ This AI system helps product teams:
 ✅ Generate AI-based recommendations  
 """)
 
-# ---------------- INPUT SECTION ---------------- #
 st.subheader("📝 Enter Feature Details")
 
 feature_name = st.text_input("📌 Feature Name")
@@ -92,26 +87,22 @@ description = st.text_area(
 
 users = st.text_input("👥 Target Users")
 
-# ---------------- ANALYZE BUTTON ---------------- #
 if st.button("🔍 Analyze Feature"):
 
     if not feature_name or not description or not users:
         st.warning("⚠️ Please fill all fields.")
     else:
 
-        # Build prompt
         prompt = build_prompt(
             feature_name,
             description,
             users
         )
 
-        # LLM Processing
         with st.spinner("🤖 Running AI analysis..."):
             raw_output = run_llm(prompt)
 
         try:
-            # Parse JSON
             if raw_output is None:
                 st.error("⚠️ AI failed to generate valid JSON.")
                 st.stop()
@@ -122,17 +113,14 @@ if st.button("🔍 Analyze Feature"):
             effort = int(data["effort"])
             risk = int(data["risk"])
 
-            # Simulation
             sim_results = simulate_outcomes(data)
 
-            # Final priority
             priority = calculate_score(
                 value,
                 effort,
                 risk
             )
 
-            # Generate insights
             insights = generate_chart_insights(
                 value,
                 effort,
@@ -140,7 +128,6 @@ if st.button("🔍 Analyze Feature"):
                 sim_results
             )
 
-            # ---------------- METRICS ---------------- #
             st.subheader("📊 Key Metrics")
 
             c1, c2, c3, c4 = st.columns(4)
@@ -157,12 +144,10 @@ if st.button("🔍 Analyze Feature"):
             with c4:
                 st.metric("🎯 Priority", priority)
 
-            # ---------------- CHARTS ---------------- #
             st.subheader("📈 Visual Analytics")
 
             col1, col2 = st.columns(2)
 
-            # ---------------- BAR CHART ---------------- #
             with col1:
 
                 fig_bar = go.Figure()
@@ -194,7 +179,6 @@ if st.button("🔍 Analyze Feature"):
                     use_container_width=True
                 )
 
-            # ---------------- RADAR CHART ---------------- #
             with col2:
 
                 fig_radar = go.Figure()
@@ -227,7 +211,6 @@ if st.button("🔍 Analyze Feature"):
                     use_container_width=True
                 )
 
-            # ---------------- DONUT CHART ---------------- #
             st.subheader("⚠️ Simulation Risk Distribution")
 
             mapping = {
@@ -265,12 +248,10 @@ if st.button("🔍 Analyze Feature"):
                 use_container_width=True
             )
 
-            # ---------------- RAW AI OUTPUT ---------------- #
             st.subheader("🧠 AI Evaluation Report")
 
             st.json(data)
 
-            # ---------------- INSIGHTS ---------------- #
             st.subheader("💡 AI-Generated Insights")
 
             for insight in insights:
@@ -283,7 +264,6 @@ if st.button("🔍 Analyze Feature"):
                     unsafe_allow_html=True
                 )
 
-            # ---------------- LLM EXPLANATION ---------------- #
             st.subheader("🧠 LLM-Based Explanation")
 
             with st.spinner("Generating detailed explanation..."):

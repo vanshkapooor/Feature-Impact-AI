@@ -6,22 +6,16 @@ import streamlit as st
 from groq import Groq
 from dotenv import load_dotenv
 
-# ---------------- LOAD ENV ---------------- #
 load_dotenv()
 
-# ---------------- API KEY HANDLING ---------------- #
 try:
-    # For Streamlit Cloud
     api_key = st.secrets["GROQ_API_KEY"]
 
 except:
-    # For local development
     api_key = os.getenv("GROQ_API_KEY")
 
-# ---------------- GROQ CLIENT ---------------- #
 client = Groq(api_key=api_key)
 
-# ---------------- JSON RESPONSE ---------------- #
 def run_llm(prompt):
 
     response = client.chat.completions.create(
@@ -56,7 +50,6 @@ def run_llm(prompt):
     return None
 
 
-# ---------------- TEXT RESPONSE ---------------- #
 def run_text_llm(prompt):
 
     response = client.chat.completions.create(
